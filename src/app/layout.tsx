@@ -33,7 +33,7 @@ export default async function RootLayout({
   const profile = normalizeProfile(rawProfile._valueJSON as unknown as ConvexUserRaw | null)
   return (
     <ConvexAuthNextjsServerProvider>
-      <html lang="en" suppressHydrationWarning={true}>
+      <html lang="en" suppressHydrationWarning>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >

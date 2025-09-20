@@ -31,3 +31,30 @@ export const SubscriptionEntitlementQuery = async () => {
   );
   return { entitlement, profileName: profile?.name || "User" };
 };
+
+
+
+export const projectQuery = async () => {
+  const rawProfile = await preloadQuery(
+    api.user.getCurrentUser,
+    {},
+    { token: await convexAuthNextjsToken() }
+  );
+
+  const profile = normalizeProfile(
+    rawProfile._valueJSON as unknown as ConvexUserRaw | null
+  );
+
+  if (!profile?.id) {
+    return { projects:null, profile: null };
+  }
+  const projects =
+    
+      await preloadQuery(
+        api.projects.getUserProjects,
+        { userId: profile.id as Id<"users"> },
+        { token: await convexAuthNextjsToken() }
+      )
+
+  return { projects, profile };
+};
