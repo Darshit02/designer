@@ -21,18 +21,19 @@ type TabsProps = {
 const Navbar = () => {
   const params = useSearchParams();
   const projectId = params.get("project");
+  const me = useAppSelector((state) => state.profile);
 
   const pathname = usePathname();
 
   const tabs: TabsProps[] = [
     {
       label: "Canvas",
-      href: `/dashboard//canvas?project=${projectId}`,
+      href: `/dashboard/${me.name}/canvas?project=${projectId}`,
       icon: <Hash className="h-4 w-4" />,
     },
     {
       label: "Style Guide",
-      href: `/dashboard//style-guide?project=${projectId}`,
+      href: `/dashboard/${me.name}/style-guide?project=${projectId}`,
       icon: <LayoutTemplate className="h-4 w-4" />,
     },
   ];
@@ -47,7 +48,6 @@ const Navbar = () => {
   );
   const hasCanvas = pathname.includes("canvas");
   const hasStyleGuide = pathname.includes("style-guide");
-  const me = useAppSelector((state) => state.profile);
 
   return (
     <div className="grid grid-cols-2 lg:grid-cols-3 p-6 fixed top-0 left-0 right-0 z-50">
