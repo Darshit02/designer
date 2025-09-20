@@ -10,6 +10,7 @@ import { CircleQuestionMark, Hash, LayoutTemplate, User } from "lucide-react";
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useAppSelector } from "@/redux/store";
+import CreateProject from "../buttons/project";
 
 type TabsProps = {
   label: string;
@@ -34,7 +35,7 @@ const Navbar = () => {
       href: `/dashboard//style-guide?project=${projectId}`,
       icon: <LayoutTemplate className="h-4 w-4" />,
     },
-  ]
+  ];
 
   const project = useQuery(
     api.projects.getProject,
@@ -105,6 +106,7 @@ const Navbar = () => {
             <User className="size-5 text-black" />
           </AvatarFallback>
         </Avatar>
+        {!hasCanvas && !hasStyleGuide && <CreateProject />}
       </div>
     </div>
   );
