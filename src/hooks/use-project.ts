@@ -89,7 +89,7 @@ const createProject = async (name?: string) => {
 }
 
   return {
-    createProject,
+    createProject ,
     isCreating: projectState.isCreating,
     projects: projectState.projects,
     projectsTotal: projectState.total,

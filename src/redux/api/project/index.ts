@@ -31,14 +31,11 @@ export const ProjectApi = createApi({
   }),
   tagTypes: ["Project"],
   endpoints: (builder) => ({
-    autosaveProject: builder.mutation<
-      AutoSavePojectResponse,
-      AutoSavePojectRequest
-    >({
+    autosaveProject: builder.mutation<AutoSavePojectResponse, AutoSavePojectRequest>({
       query: (data) => ({
-        url : '' ,
-        method : 'PATCH',
-        body : data
+        url: "",
+        method: "PATCH",
+        body: data
       }),
     }),
   }),
