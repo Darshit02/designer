@@ -70,7 +70,7 @@ const ProjectList = (props: Props) => {
                 </div>
                 <div className="space-y-1">
                   <h3 className="font-medium text-foreground text-sm truncate group-hover:text-primary transition-colors">
-                    {project.name}
+                    {project.name} - {project.projectNumber}
                   </h3>
                   <p className="text-sm text-muted-foreground">
                     {formatDistanceToNow(new Date(project.createdAt), { addSuffix: true })}
