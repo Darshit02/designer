@@ -48,9 +48,7 @@ export const projectQuery = async () => {
   if (!profile?.id) {
     return { projects:null, profile: null };
   }
-  const projects =
-    
-      await preloadQuery(
+  const projects =  await preloadQuery(
         api.projects.getUserProjects,
         { userId: profile.id as Id<"users"> },
         { token: await convexAuthNextjsToken() }
@@ -58,3 +56,27 @@ export const projectQuery = async () => {
 
   return { projects, profile };
 };
+
+export const StyleGuideQuery = async (projectId?:string) => {
+  if (!projectId) return { styleGuide: null };
+
+  const styleGuide = await preloadQuery(
+    api.projects.getProjectStyleGuide,
+    { projectId: projectId as Id<"projects">,},
+    { token: await convexAuthNextjsToken() }
+  );
+
+  return { styleGuide };
+};
+
+
+export const MoodBoardImageQuery = async (projectId : string) => {
+  const images = await preloadQuery(
+    api.moodboard.getMoodBoardImages,
+    {
+      projectId: projectId as Id<"projects">,
+    },
+    { token: await convexAuthNextjsToken() }
+  )
+  return { images }
+}
