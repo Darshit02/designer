@@ -17,7 +17,7 @@ const MoodBoard = ({ guideImages }: Props) => {
     images,
     dragActive,
     removeImage,
-    handlDrag,
+    handleDrag,
     handleDrop,
     handleFileInput,
     canAddMore,
@@ -35,9 +35,9 @@ const MoodBoard = ({ guideImages }: Props) => {
             ? "border-primary bg-primary/5 scale-[1.02]"
             : "border-border/50 hover:border-border"
         )}
-        onDragEnter={handlDrag}
-        onDragLeave={handlDrag}
-        onDragOver={handlDrag}
+        onDragEnter={handleDrag}
+        onDragLeave={handleDrag}
+        onDragOver={handleDrag}
         onDrop={handleDrop}
       >
         <div className="absolute inset-0 opacity-5">
@@ -129,7 +129,7 @@ const MoodBoard = ({ guideImages }: Props) => {
               <h3 className="text-lg font-medium text-foreground">
                 Drag your images here
               </h3>
-              <p className="text-sm text-muted-foreground mex-w-md mx-auto">
+              <p className="text-sm text-muted-foreground max-w-md mx-auto">
                 Drag and Drop up to 5 images to build your mood board
               </p>
             </div>

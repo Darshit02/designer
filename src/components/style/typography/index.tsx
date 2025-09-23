@@ -53,7 +53,7 @@ const StyleGuideTypography = ({ typographyGuide }: Props) => {
                         letterSpacing : style.letterSpacing || 'normal'
                     }}
                     >
-                     The Quick brown fox jump over the LazY.
+                     The Quick brown fox jumps over the LazY.
                     </div>
                     <div className="text-xs text-muted-foreground space-y-1">
                         <div>Font : {style.fontFamily}</div>

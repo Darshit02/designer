@@ -115,7 +115,7 @@ export const useMoodBoard = (guideImages: MoodBoardImage[]) => {
     };
     const uploadImages = [...images, newImage];
     setValue("images", uploadImages);
-    toast.success("Image uploaded sucessfuly");
+    toast.success("Image uploaded sucessfully");
   };
   const removeImage = async (imageId: string) => {
     const imageToRemove = images.find((img) => img.id === imageId);
@@ -151,7 +151,7 @@ export const useMoodBoard = (guideImages: MoodBoardImage[]) => {
     toast.success("Image removed");
   };
 
-  const handlDrag = (e: React.DragEvent) => {
+  const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -248,7 +248,7 @@ images,
 dragActive,
 addImage,
 removeImage,
-handlDrag,
+handleDrag,
 handleDrop,
 handleFileInput,
 canAddMore : images.length <  5

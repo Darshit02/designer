@@ -31,16 +31,6 @@ export interface TypographySelection {
 export interface StyleGuide {
     theme : string,
     description : string,
-    colorSelections : [
-        ColorSelection,
-        ColorSelection,
-        ColorSelection,
-        ColorSelection,
-        ColorSelection
-    ]
-    typographySelections : [
-        TypographySelection,
-        TypographySelection,
-        TypographySelection,
-    ]
+    colorSelections : ColorSelection[]
+    typographySelections : TypographySelection[]
 }

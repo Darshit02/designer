@@ -17,7 +17,7 @@ export const ColorSwatch = ({
       >
         <div className="space-y-1 min-w-0 flex-1">
           <h4 className="text-sm font-medium text-foreground">{name}</h4>
-          <p className="text-xs font-mutext-muted-foreground font-mono uppercase">
+          <p className="text-xs text-muted-foreground font-mono uppercase">
             {value}
           </p>
         </div>

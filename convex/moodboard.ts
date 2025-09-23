@@ -61,7 +61,7 @@ export const removeMoodBoardImage = mutation({
 
     const project = await ctx.db.get(projectId);
     if (!project || project.userId !== userId) {
-      throw new Error("Not authorizeds");
+      throw new Error("Not authorized");
     }
 
     if (project.userId !== userId) {
