@@ -23,6 +23,7 @@ const MoodBoard = ({ guideImages }: Props) => {
     canAddMore,
   } = useMoodBoard(guideImages);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
   const handleFileUploadClick = () => {
     fileInputRef.current?.click();
   };
@@ -151,7 +152,24 @@ const MoodBoard = ({ guideImages }: Props) => {
             </Button>
           </div>
         )}
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileInput}
+          className="hidden"
+          accept="image/*"
+          multiple
+        />
       </div>
+      {/* TODO : Add AI generation */}
+      <Button className="w-fit">Generate with AI</Button>
+      {images.length >= 5 && (
+        <div className="text-center p-4 bg-muted/50 rounded-2xl mt-4">
+          <p className="text-sm text-muted-foreground">
+            Maximum of 5 images reached. Remove an image to add more.
+          </p>
+        </div>
+      )}
     </div>
   );
 };
