@@ -26,27 +26,33 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
-  const rawProfile = await ProfileQuery()
-  const profile = normalizeProfile(rawProfile._valueJSON as unknown as ConvexUserRaw | null)
+}) {
+  const rawProfile = await ProfileQuery();
+  const profile = normalizeProfile(
+    rawProfile._valueJSON as unknown as ConvexUserRaw | null
+  );
+
   return (
-    <ConvexAuthNextjsServerProvider>
-      <html lang="en" suppressHydrationWarning>
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className="antialiased bg-background">
+        <ConvexAuthNextjsServerProvider>
           <ConvexClientProvider>
-            <ThemeProvider defaultTheme="dark" attribute="class" enableSystem disableTransitionOnChange>
-             <ReduxProvider preloadedState={{ profile }}> 
-              {children}
-              <Toaster />
-             </ReduxProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <ReduxProvider preloadedState={{ profile }}>
+                {children}
+                <Toaster />
+              </ReduxProvider>
             </ThemeProvider>
           </ConvexClientProvider>
-        </body>
-      </html>
-    </ConvexAuthNextjsServerProvider>
+        </ConvexAuthNextjsServerProvider>
+      </body>
+    </html>
   );
 }
