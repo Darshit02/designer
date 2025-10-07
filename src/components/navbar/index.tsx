@@ -21,7 +21,7 @@ type TabsProps = {
 const Navbar = () => {
   const params = useSearchParams();
   const projectId = params.get("project");
-  const me = useAppSelector((state) => state.profile);
+  const me = useAppSelector((state) => state.profile.user);
 
   const pathname = usePathname();
 

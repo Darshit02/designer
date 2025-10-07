@@ -33,12 +33,13 @@ export const SubscriptionEntitlementQuery = async () => {
 };
 
 
+export const projectsQuery = async () => {
+  const token = await convexAuthNextjsToken();
 
-export const projectQuery = async () => {
   const rawProfile = await preloadQuery(
     api.user.getCurrentUser,
     {},
-    { token: await convexAuthNextjsToken() }
+    { token }
   );
 
   const profile = normalizeProfile(
@@ -46,15 +47,36 @@ export const projectQuery = async () => {
   );
 
   if (!profile?.id) {
-    return { projects:null, profile: null };
+    return { projects: [], profile: null, projectsPreload: null };
   }
-  const projects =  await preloadQuery(
-        api.projects.getUserProjects,
-        { userId: profile.id as Id<"users"> },
+
+  const projectsPreload = await preloadQuery(
+    api.projects.getUserProjects,
+    { userId: profile.id as Id<"users"> },
+    { token }
+  );
+
+  const projects = (projectsPreload._valueJSON as unknown as Array<any>) ?? [];
+
+  return { projects, profile, projectsPreload };
+};
+
+export const projectQuery = async (projectId:string) => {
+  const rawProfile = await ProfileQuery()
+  const profile = normalizeProfile(
+    rawProfile._valueJSON as unknown as ConvexUserRaw | null
+  );
+
+  if (!profile?.id || !projectId) {
+    return { project:null, profile: null };
+  }
+  const project =  await preloadQuery(
+        api.projects.getProject,
+        { projectId: projectId as Id<"projects"> },
         { token: await convexAuthNextjsToken() }
       )
 
-  return { projects, profile };
+  return { project, profile };
 };
 
 export const StyleGuideQuery = async (projectId?:string) => {

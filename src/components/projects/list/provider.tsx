@@ -11,7 +11,7 @@ type Props = {
 const ProjectProvider = ({ children, initialProject }: Props) => {
   const dispatch = useAppDispatch();
   const projects = initialProject?._valueJSON as any[] | null;
-  const user = useAppSelector((state) => state.profile);
+  const user = useAppSelector((state) => state.profile.user);
 
   useEffect(() => {
     if (!user?.id) return;

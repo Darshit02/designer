@@ -45,7 +45,7 @@ const randomGradient =
 
 export const useProjectCreation = () => {
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.profile);
+  const user = useAppSelector((state) => state.profile.user);
   const projectState = useAppSelector((state) => state.projects);
   const shapesState = useAppSelector((state) => state.shapes);
 
