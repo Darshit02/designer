@@ -11,7 +11,7 @@ type Props = {};
 
 const ProjectList = (props: Props) => {
   const { projects, canCreate } = useProjectCreation();
-  const user = useAppSelector((state) => state.profile);
+  const user = useAppSelector((state) => state.profile.user);
   
   if (!canCreate) {
     return (

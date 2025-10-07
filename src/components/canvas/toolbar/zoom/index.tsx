@@ -1,34 +1,57 @@
-'use client'
-import { Button } from '@/components/ui/button'
-import { useInfiniteCanvas } from '@/hooks/use-canvas'
-import { ZoomOut } from 'lucide-react'
-import React from 'react'
+"use client";
+import { Button } from "@/components/ui/button";
+import { useInfiniteCanvas } from "@/hooks/use-canvas";
+import { setScale } from "@/redux/slice/viewport";
+import { ZoomIn, ZoomOut } from "lucide-react";
+import React from "react";
+import { useDispatch } from "react-redux";
 
-type Props = {}
+type Props = {};
 
 const ZoomBar = (props: Props) => {
-const {viewport} = useInfiniteCanvas()
+  const dispatch = useDispatch();
+  const { viewport } = useInfiniteCanvas();
 
-    //TODO : ZOOM in ZOOM Out
-    // const handleZoomOut = () =>{
-    //     const newScale = Math.max(viewport.scale/1.2,viewport.minScale)
-    // dispatch(setScale({scale:newScale}))
-    
-    // }
+  //TODO : ZOOM in ZOOM Out
+  const handleZoomOut = () => {
+    const newScale = Math.max(viewport.scale / 1.2, viewport.minScale);
+    dispatch(setScale({ scale: newScale }));
+  };
+
+  const handleZoomIn = () => {
+    const newScale = Math.max(viewport.scale * 1.2, viewport.maxScale);
+    dispatch(setScale({ scale: newScale }));
+  };
+
   return (
-    <div className='col-span-1 flex justify-end items-center'>
-        <div className="flex items-center gap-1 backdrop-blur-xl bg-white/[0.08] border border-white/[0.12] rounded-full p-3 saturate-150">
+    <div className="col-span-1 flex justify-end items-center">
+      <div className="flex items-center gap-1 backdrop-blur-xl bg-white/[0.08] border border-white/[0.12] rounded-full p-3 saturate-150">
         <Button
-        variant={"ghost"}
-        size="lg"
-        className='w-9 h-9 p-0 rounded-full cursor-pointer hover:bg-white/[0.12] border border-transparent hover:border-white/[0.16] transition-all'
-title='Zoom Out'
->
-            <ZoomOut className='w-4 h-4 text-primary/50'/>
+          variant={"ghost"}
+          onClick={handleZoomOut}
+          size="lg"
+          className="w-9 h-9 p-0 rounded-full cursor-pointer hover:bg-white/[0.12] border border-transparent hover:border-white/[0.16] transition-all"
+          title="Zoom Out"
+        >
+          <ZoomOut className="w-4 h-4 text-primary/50" />
         </Button>
+        <div className="text-center">
+          <span className="text-sm font-mono leading-none text-primary/50">
+            {Math.round(viewport.scale * 100)}%
+          </span>
         </div>
+        <Button
+          variant={"ghost"}
+          onClick={handleZoomIn}
+          size="lg"
+          className="w-9 h-9 p-0 rounded-full cursor-pointer hover:bg-white/[0.12] border border-transparent hover:border-white/[0.16] transition-all"
+          title="Zoom Out"
+        >
+          <ZoomIn className="w-4 h-4 text-primary/50" />
+        </Button>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default ZoomBar
+export default ZoomBar;

@@ -1,10 +1,10 @@
 import ProjectList from "@/components/projects/list";
 import ProjectProvider from "@/components/projects/list/provider";
-import { projectQuery } from "@/convex/query.config";
+import { projectQuery, projectsQuery } from "@/convex/query.config";
 import React from "react";
 
 const Page = async () => {
-  const { projects, profile } = await projectQuery();
+  const { projects, profile, projectsPreload } = await projectsQuery();
 
   if (!profile) {
     return (
@@ -22,7 +22,7 @@ const Page = async () => {
   }
 
   return (
-    <ProjectProvider initialProject={projects}>
+    <ProjectProvider initialProject={projectsPreload}>
       <div className="container mx-auto py-36 px-4">
         <ProjectList />
       </div>

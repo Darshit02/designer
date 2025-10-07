@@ -45,7 +45,7 @@ export default async function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              <ReduxProvider preloadedState={{ profile }}>
+              <ReduxProvider preloadedState={{ profile: { user: profile } }}>
                 {children}
                 <Toaster />
               </ReduxProvider>

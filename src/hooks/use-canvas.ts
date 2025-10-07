@@ -1,4 +1,5 @@
 "use client";
+import { downloadBlob, generateFrameSnapShot } from "@/lib/frame-snapshot";
 import {
   addArrow,
   addEllipse,
@@ -8,6 +9,7 @@ import {
   addRect,
   addText,
   clearSelection,
+  FrameShape,
   removeShape,
   selectShape,
   setTool,
@@ -27,6 +29,7 @@ import {
   wheelZoom,
 } from "@/redux/slice/viewport";
 import { AppDispatch, useAppSelector } from "@/redux/store";
+import { CopyX } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 
@@ -38,7 +41,7 @@ interface TouchPointer {
 const RAF_INTERVAL_MS = 8;
 
 interface DraftShape {
-  type: "frame" | "rect" | "ellipes" | "arrow" | "line";
+  type: "frame" | "rect" | "ellipse" | "arrow" | "line";
   startWorld: Point;
   currentWorld: Point;
 }
@@ -411,7 +414,7 @@ export const useInfiniteCanvas = () => {
           if (
             currentTool === "frame" ||
             currentTool === "rect" ||
-            currentTool === "ellipes" ||
+            currentTool === "ellipse" ||
             currentTool === "arrow" ||
             currentTool === "line"
           ) {
@@ -462,7 +465,7 @@ export const useInfiniteCanvas = () => {
           if (
             shape.type === "frame" ||
             shape.type === "rect" ||
-            shape.type === "ellipes" ||
+            shape.type === "ellipse" ||
             shape.type === "text" ||
             shape.type === "generatedui"
           ) {
@@ -549,7 +552,7 @@ export const useInfiniteCanvas = () => {
           dispatch(addFrame({ x, y, w, h }));
         } else if (draft.type === "rect") {
           dispatch(addRect({ x, y, w, h }));
-        } else if (draft.type === "ellipes") {
+        } else if (draft.type === "ellipse") {
           dispatch(addEllipse({ x, y, w, h }));
         } else if (draft.type === "arrow") {
           dispatch(
@@ -699,7 +702,7 @@ export const useInfiniteCanvas = () => {
       if (
         shape.type === "frame" ||
         shape.type === "rect" ||
-        shape.type === "ellips"
+        shape.type === "ellipse"
       ) {
         dispatch(
           updateShape({
@@ -877,5 +880,39 @@ export const useInfiniteCanvas = () => {
     isSidebarOpen,
     hasSelectedText,
     setIsSidebarOpen,
+  };
+};
+
+export const useFrame = (shape: FrameShape) => {
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const allShapes = useAppSelector((state) =>
+    Object.values(state.shapes.shapes?.entities || {}).filter(
+      (shape): shape is Shape => shape !== undefined
+    )
+  );
+  const handleGenerateDesign = async () => {
+    try {
+      setIsGenerating(true);
+      const snapshot = await generateFrameSnapShot(shape, allShapes);
+
+      downloadBlob(snapshot, `frame-${shape.frameNumber}-snapshot.png`);
+      const formData = new FormData()
+
+      formData.append('image',snapshot,`frame-${shape.frameNumber}.png`)
+      formData.append('frameNumber',shape.frameNumber.toString())
+
+      const urlParams = new URLSearchParams(window.location.search)
+      const projectId = urlParams.get('project')
+      if(projectId) {
+        formData.append('projectId',projectId)
+      }
+      
+    } catch (error) {}
+  };
+
+  return {
+    isGenerating,
+    handleGenerateDesign,
   };
 };
