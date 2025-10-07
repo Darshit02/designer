@@ -13,60 +13,70 @@ const tools : Array<{
     icon : React.ReactElement
     label : string
     description : string
+    shortcut : string
 }> = [
     {
         id : 'select',
         icon : <MousePointer2 className='w-4 h-4' />,
         label : "Select",
-        description : "Select and Move Shapes"
+        description : "Select and Move Shapes",
+        shortcut : "V"
     },
     {
         id: 'frame',
         icon: <Frame className='w-4 h-4' />,
         label: 'Frame',
-        description: 'Create frames to group content'
+        description: 'Create frames to group content',
+        shortcut : "F"
     },
     {
         id: 'rect',
         icon: <Square className='w-4 h-4' />,
         label: 'Rectangle',
-        description: 'Draw rectangles and squares'
+        description: 'Draw rectangles and squares',
+        shortcut : "R"
     },
     {
         id: 'ellipse',
         icon: <Circle className='w-4 h-4' />,
         label: 'Ellipse',
-        description: 'Draw circles and ellipses'
+        description: 'Draw circles and ellipses',
+        shortcut : "O"
     },
     {
         id: 'freedraw',
         icon: <Pencil className='w-4 h-4' />,
         label: 'Free Draw',
-        description: 'Draw freehand paths'
+        description: 'Draw freehand paths',
+        shortcut : "P"
     },
     {
         id: 'arrow',
         icon: <ArrowRight className='w-4 h-4' />,
         label: 'Arrow',
-        description: 'Draw arrows between points'
+        description: 'Draw arrows between points',
+        shortcut : "A"
     },
     {
         id: 'line',
         icon: <Minus className='w-4 h-4' />,
         label: 'Line',
-        description: 'Draw straight lines'
+        description: 'Draw straight lines',
+        shortcut : "L"
     },
     {
         id: 'text',
         icon: <Type className='w-4 h-4' />,
         label: 'Text',
-        description: 'Add text labels'
+        description: 'Add text labels',
+        shortcut : "T"
     },
     {
         id: 'eraser',
         icon: <Eraser className='w-4 h-4' />,
         label: 'Eraser',
-        description: 'Erase shapes or strokes'
+        description: 'Erase shapes or strokes',
+        shortcut : "E"
     }
 ]
 
@@ -84,7 +94,7 @@ const ToolbarShapes = (props: Props) => {
             size={"lg"}
             onClick={() => selectTool(tool.id)}
             className={cn('cursor-pointer rounded-full p-3', currentTool === tool.id ? "text-primary/100 bg-white/[0.12] border border-white/[0.16]" : 'text-primary/50 hover:bg-white/[0.06] border border-transparent')}
-            title={`${tool.label} - ${tool.description}`}
+            title={`${tool.label} - ${tool.description} (${tool.shortcut})`}
             >
                 {tool.icon}
             </Button>
