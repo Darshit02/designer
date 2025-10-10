@@ -11,6 +11,7 @@ import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useAppSelector } from "@/redux/store";
 import CreateProject from "../buttons/project";
+import AutoSave from "../canvas/autosave";
 
 type TabsProps = {
   label: string;
@@ -106,6 +107,7 @@ const Navbar = () => {
             <User className="size-5 text-black" />
           </AvatarFallback>
         </Avatar>
+        {hasCanvas && <AutoSave/>}
         {!hasCanvas && !hasStyleGuide && <CreateProject />}
       </div>
     </div>

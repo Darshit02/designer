@@ -51,7 +51,7 @@ const InfinityCanvas = (props: Props) => {
           aria-label="Infinite drawing canvas"
           tabIndex={0}
           className={cn(
-            "relative w-full h-full overflow-hidden select-none z-0 focus:outline-none",
+            "relative w-full h-full overflow-hidden select-none z-0 focus:outline-none bg-[radial-gradient(circle,theme(colors.gray.300)_1px,transparent_1px)] dark:bg-[radial-gradient(circle,theme(colors.gray.800)_1px,transparent_1px)] [background-size:40px_40px]",
             {
               "cursor-grabbing": viewport.mode === "panning",
               "cursor-grab": viewport.mode === "shiftPanning",
