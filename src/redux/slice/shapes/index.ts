@@ -112,6 +112,7 @@ interface ShapesState {
   shapes: EntityState<Shape, string>;
   selected: SelectionMap;
   frameCounter: number;
+  clipboard: Shape[]; // Store copied shapes
 }
 
 const initialState: ShapesState = {
@@ -119,6 +120,7 @@ const initialState: ShapesState = {
   shapes: shapesAdapter.getInitialState(),
   selected: {},
   frameCounter: 0,
+  clipboard: [],
 };
 
 const DEFAULTS = { stroke: "#ffff", strokeWidth: 2 as const };
@@ -414,6 +416,99 @@ const shapesSlice = createSlice({
       state.selected = action.payload.selected;
       state.frameCounter = action.payload.frameCounter;
     },
+
+    // Copy selected shapes to clipboard
+    copySelected(state) {
+      const selectedIds = Object.keys(state.selected);
+      const shapesToCopy = selectedIds
+        .map(id => state.shapes.entities[id])
+        .filter((shape): shape is Shape => Boolean(shape));
+      
+      state.clipboard = shapesToCopy.map(shape => ({
+        ...shape,
+        id: nanoid(), // Generate new ID for clipboard
+      }));
+    },
+
+    // Paste shapes from clipboard
+    pasteFromClipboard(state, action: PayloadAction<{ offsetX?: number; offsetY?: number }>) {
+      const { offsetX = 20, offsetY = 20 } = action.payload;
+      
+      if (state.clipboard.length === 0) return;
+
+      // Clear current selection
+      state.selected = {};
+
+      // Add each shape from clipboard with offset
+      state.clipboard.forEach(shape => {
+        const newShape = { ...shape, id: nanoid() };
+        
+        // Apply offset based on shape type
+        if (shape.type === 'frame' || shape.type === 'rect' || shape.type === 'ellipse' || shape.type === 'generatedui') {
+          (newShape as any).x = (shape as any).x + offsetX;
+          (newShape as any).y = (shape as any).y + offsetY;
+        } else if (shape.type === 'arrow' || shape.type === 'line') {
+          (newShape as any).startX = (shape as any).startX + offsetX;
+          (newShape as any).startY = (shape as any).startY + offsetY;
+          (newShape as any).endX = (shape as any).endX + offsetX;
+          (newShape as any).endY = (shape as any).endY + offsetY;
+        } else if (shape.type === 'text') {
+          (newShape as any).x = (shape as any).x + offsetX;
+          (newShape as any).y = (shape as any).y + offsetY;
+        } else if (shape.type === 'freedraw') {
+          (newShape as any).points = (shape as any).points.map((point: any) => ({
+            x: point.x + offsetX,
+            y: point.y + offsetY,
+          }));
+        }
+
+        shapesAdapter.addOne(state.shapes, newShape);
+        state.selected[newShape.id] = true;
+      });
+    },
+
+    // Duplicate selected shapes (copy + paste in place)
+    duplicateSelected(state) {
+      const selectedIds = Object.keys(state.selected);
+      const shapesToDuplicate = selectedIds
+        .map(id => state.shapes.entities[id])
+        .filter((shape): shape is Shape => Boolean(shape));
+      
+      if (shapesToDuplicate.length === 0) return;
+
+      // Clear current selection
+      state.selected = {};
+
+      // Add duplicated shapes with small offset
+      shapesToDuplicate.forEach(shape => {
+        const newShape = { ...shape, id: nanoid() };
+        
+        // Apply small offset for visual separation
+        const offsetX = 10;
+        const offsetY = 10;
+        
+        if (shape.type === 'frame' || shape.type === 'rect' || shape.type === 'ellipse' || shape.type === 'generatedui') {
+          (newShape as any).x = (shape as any).x + offsetX;
+          (newShape as any).y = (shape as any).y + offsetY;
+        } else if (shape.type === 'arrow' || shape.type === 'line') {
+          (newShape as any).startX = (shape as any).startX + offsetX;
+          (newShape as any).startY = (shape as any).startY + offsetY;
+          (newShape as any).endX = (shape as any).endX + offsetX;
+          (newShape as any).endY = (shape as any).endY + offsetY;
+        } else if (shape.type === 'text') {
+          (newShape as any).x = (shape as any).x + offsetX;
+          (newShape as any).y = (shape as any).y + offsetY;
+        } else if (shape.type === 'freedraw') {
+          (newShape as any).points = (shape as any).points.map((point: any) => ({
+            x: point.x + offsetX,
+            y: point.y + offsetY,
+          }));
+        }
+
+        shapesAdapter.addOne(state.shapes, newShape);
+        state.selected[newShape.id] = true;
+      });
+    },
   },
 });
 
@@ -436,6 +531,9 @@ export const {
   selectAll,
   deleteSelected,
   loadProject,
+  copySelected,
+  pasteFromClipboard,
+  duplicateSelected,
 } = shapesSlice.actions;
 
 export default shapesSlice.reducer;

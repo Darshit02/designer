@@ -9,8 +9,12 @@ import {
   addRect,
   addText,
   clearSelection,
+  copySelected,
+  duplicateSelected,
   FrameShape,
+  pasteFromClipboard,
   removeShape,
+  selectAll,
   selectShape,
   setTool,
   Shape,
@@ -285,6 +289,11 @@ export const useInfiniteCanvas = () => {
     }
   };
   const onPointerDown: React.PointerEventHandler<HTMLDivElement> = (e) => {
+    // Ensure canvas has focus for keyboard events
+    if (canvasRef.current) {
+      canvasRef.current.focus();
+    }
+    
     const target = e.target as HTMLElement;
     const isButton =
       target.tagName === "BUTTON" ||
@@ -605,10 +614,101 @@ export const useInfiniteCanvas = () => {
     onPointerUp(e);
   };
   const onKeyDown = (e: KeyboardEvent): void => {
+    // Handle Shift key for hand tool
     if ((e.code === "ShiftLeft" || e.code === "ShiftRight") && !e.repeat) {
       e.preventDefault();
       isSpacePressed.current = true;
       dispatch(handToolEnable());
+      return;
+    }
+
+    // Handle keyboard shortcuts
+    if (e.ctrlKey || e.metaKey) {
+      e.preventDefault();
+      
+      switch (e.key.toLowerCase()) {
+        case 'c':
+          // Copy selected shapes
+          if (Object.keys(selectedShapes).length > 0) {
+            dispatch(copySelected());
+          }
+          break;
+        case 'v':
+          // Paste from clipboard
+          dispatch(pasteFromClipboard({}));
+          break;
+        case 'd':
+          // Duplicate selected shapes
+          if (Object.keys(selectedShapes).length > 0) {
+            dispatch(duplicateSelected());
+          }
+          break;
+        case 'a':
+          // Select all shapes
+          dispatch(selectAll());
+          break;
+        case 'z':
+          // Undo (placeholder - would need undo/redo implementation)
+          console.log('Undo requested');
+          break;
+        case 'y':
+          // Redo (placeholder - would need undo/redo implementation)
+          console.log('Redo requested');
+          break;
+      }
+    } else {
+      // Handle tool shortcuts (without Ctrl/Cmd)
+      switch (e.key.toLowerCase()) {
+        case 'v':
+          // Select tool
+          dispatch(setTool('select'));
+          break;
+        case 'f':
+          // Frame tool
+          dispatch(setTool('frame'));
+          break;
+        case 'r':
+          // Rectangle tool
+          dispatch(setTool('rect'));
+          break;
+        case 'o':
+          // Ellipse tool
+          dispatch(setTool('ellipse'));
+          break;
+        case 'p':
+          // Pencil/Free draw tool
+          dispatch(setTool('freedraw'));
+          break;
+        case 'a':
+          // Arrow tool
+          dispatch(setTool('arrow'));
+          break;
+        case 'l':
+          // Line tool
+          dispatch(setTool('line'));
+          break;
+        case 't':
+          // Text tool
+          dispatch(setTool('text'));
+          break;
+        case 'e':
+          // Eraser tool
+          dispatch(setTool('eraser'));
+          break;
+        case 'Escape':
+          // Clear selection
+          dispatch(clearSelection());
+          break;
+        case 'Delete':
+        case 'Backspace':
+          // Delete selected shapes
+          if (Object.keys(selectedShapes).length > 0) {
+            Object.keys(selectedShapes).forEach(id => {
+              dispatch(removeShape(id));
+            });
+          }
+          break;
+      }
     }
   };
   const onKeyUp = (e: KeyboardEvent): void => {

@@ -11,6 +11,8 @@ import { ArrowPreview } from "./shapes/arrow/preview";
 import { LinePreview } from "./shapes/line/preview";
 import { FreeDrawStrokePreview } from "./shapes/stroke/preview";
 import { SelectionOverlay } from "./shapes/selection";
+import { CanvasContextMenu } from "./context-menu";
+import { ClipboardStatus } from "../clipboard-status";
 
 type Props = {};
 
@@ -39,31 +41,33 @@ const InfinityCanvas = (props: Props) => {
   return (
     <>
       <TextSidebar isOpen={isSidebarOpen && hasSelectedText} />
+      <ClipboardStatus />
       {/* TODO : insperation */}
       {/* TODO : chat window*/}
-      <div
-        ref={attachCanvasRef}
-        role="application"
-        aria-label="Infinite drawing canvas"
-        className={cn(
-          "relative w-full h-full overflow-hidden select-none z-0",
-          {
-            "cursor-grabbing": viewport.mode === "panning",
-            "cursor-grab": viewport.mode === "shiftPanning",
-            "cursor-crosshair":
-              currentTool !== "select" && viewport.mode === "idle",
-            "cursor-default":
-              currentTool === "select" && viewport.mode === "idle",
-          }
-        )}
-        style={{ touchAction: "none" }}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        onPointerCancel={onPointerCancle}
-        onContextMenu={(e) => e.preventDefault()}
-        draggable={false}
-      >
+      <CanvasContextMenu>
+        <div
+          ref={attachCanvasRef}
+          role="application"
+          aria-label="Infinite drawing canvas"
+          tabIndex={0}
+          className={cn(
+            "relative w-full h-full overflow-hidden select-none z-0 focus:outline-none bg-[radial-gradient(circle,theme(colors.gray.300)_1px,transparent_1px)] dark:bg-[radial-gradient(circle,theme(colors.gray.800)_1px,transparent_1px)] [background-size:40px_40px]",
+            {
+              "cursor-grabbing": viewport.mode === "panning",
+              "cursor-grab": viewport.mode === "shiftPanning",
+              "cursor-crosshair":
+                currentTool !== "select" && viewport.mode === "idle",
+              "cursor-default":
+                currentTool === "select" && viewport.mode === "idle",
+            }
+          )}
+          style={{ touchAction: "none" }}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={onPointerCancle}
+          draggable={false}
+        >
         <div
           className="absolute origin-top-left pointer-events-none z-10"
           style={{
@@ -127,7 +131,8 @@ const InfinityCanvas = (props: Props) => {
             <FreeDrawStrokePreview points={freeDrawPoints} />
           )}
         </div>
-      </div>
+        </div>
+      </CanvasContextMenu>
     </>
   );
 };
